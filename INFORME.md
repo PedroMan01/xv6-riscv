@@ -38,5 +38,5 @@ Comenté la línea mencionada para evitar el error, lo que permitió que Xv6 se 
 ----------------------------------------------------------------------------------------------------------------------------
 Con las funciones comentadas, Xv6 se compila y se ejecuta correctamente en mi entorno configurado en WSL.
 
-![Primera Captura del SO funcionando](Capturas/Captura1.png)
-![Seguda Captura del SO funcionando](Capturas/Captura2.png)
+![Primera Captura del SO funcionando](Capturas/captura1.png)
+![Seguda Captura del SO funcionando](Capturas/captura2.png)
