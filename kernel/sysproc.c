@@ -5,6 +5,7 @@
 #include "memlayout.h"
 #include "spinlock.h"
 #include "proc.h"
+#include "syscall.h"
 
 uint64
 sys_exit(void)
@@ -90,4 +91,19 @@ sys_uptime(void)
   xticks = ticks;
   release(&tickslock);
   return xticks;
+}
+
+// Agrega esta función a kernel/sysproc.c
+// kernel/sysproc.c
+
+// Función auxiliar para obtener el ancestro
+uint64
+get_ancestor(int level)
+{
+    struct proc *p = myproc();
+
+    // Aquí deberías implementar la lógica para obtener el ancestro
+    // Devolver un valor de ejemplo, por ejemplo, el PID del proceso padre
+    // Aquí solo devolvemos el PID del proceso padre para ilustrar
+    return p->parent ? p->parent->pid : -1;
 }
