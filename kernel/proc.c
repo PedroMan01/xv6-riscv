@@ -699,3 +699,18 @@ uint64 sys_getppid(void) {
     return myproc()->parent->pid;
 }
 
+uint64 sys_getancestor(void) {
+    // El primer argumento de la llamada al sistema está en el registro a0
+    int generation = myproc()->trapframe->a0;
+    
+    struct proc *p = myproc();
+
+    for (int i = 0; i < generation; i++) {
+        if (p->parent == 0) {
+            return -1; // No hay más ancestros
+        }
+        p = p->parent;
+    }
+
+    return p->pid; // Retorna el PID del ancestro
+}

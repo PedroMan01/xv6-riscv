@@ -1,9 +1,9 @@
-Para la tarea 1 Parte 1
-Lo primero fué definir en syscall.h el número de la llamada de la nueva función "getppid"
+Para la tarea 1 Parte 2
+Lo primero fué definir en syscall.h el número de la llamada de la nueva función "getancestor"
 
 ![Primer Cambio](Capturas/Captura1.png)
 
-En segundo lugar, editar proc.c para agregar la función "sys_getppid" la cual retorna el ID del proceso padre del proceso que la invoca.
+En segundo lugar, editar proc.c para agregar la función "sys_getancestor" la cual retorna el ID de la generacion "generation" anterior del proceso que la invoca ciendo 0 el proceso acual y devolviendo -1 si no hay más tantas generaciones anteriores.
 
 ![Segundo Cambio](Capturas/Captura2.png)
 
@@ -13,20 +13,20 @@ En el tercer paso se editó el archivo syscall.c para agregar la nueva llamada a
 
 Luego se buscó modificar el archivo user.h para declarar la nueva función.
 
-![Tercer Cambio](Capturas/Captura4.png)
+![Cuarto Cambio](Capturas/Captura4.png)
 
 En el cuarto paso se modificó el archivo usys.s para añadir la llamada a Sistema.
 
-![Tercer Cambio](Capturas/Captura5.png)
+![Quinto Cambio](Capturas/Captura5.png)
 
-Por último se creo el archivo test.c en la carpeta user para probar la llamada.
+Por último se creo el archivo test.c en la carpeta user para probar la llamada con las generaciones 0, 1 y 5.
 
-![Tercer Cambio](Capturas/Captura6.png)
+![Sexto Cambio](Capturas/Captura6.png)
 
-Como paso adicional para realizar el test se modifico el archivo Makefile para agregar el archivo test.c
+Como paso adicional para realizar el test se modifico el archivo Makefile para agregar el archivo test2.c
 
-![Tercer Cambio](Capturas/Captura7.png)
+![Septimo Cambio](Capturas/Captura7.png)
 
 Prueba de la nueva función.
 
-![Tercer Cambio](Capturas/Captura8.png)
+![Octabo Cambio](Capturas/Captura8.png)
