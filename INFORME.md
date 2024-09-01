@@ -1,42 +1,32 @@
-Configuración del Entorno
+Para la tarea 1 Parte 1
+Lo primero fué definir en syscall.h el número de la llamada de la nueva función "getppid"
 
-Paso 1: Instalación de Ubuntu en WSL
-Instalé WSL (Windows Subsystem for Linux) en mi computadora Windows siguiendo los pasos oficiales de Microsoft.
-Luego, descargué e instalé Ubuntu desde Chrome.
+![Primer Cambio](Capturas/Captura1.png)
 
-Paso2: Configurara VScode
-Configuré VSCode para trabajar con el entorno de desarrollo WSL, instalando las extensiones necesarias para la integración.
+En segundo lugar, editar proc.c para agregar la función "sys_getppid" la cual retorna el ID del proceso padre del proceso que la invoca.
 
-Paso 3: Instalación de Herramientas de Desarrollo
-En Ubuntu, instalé las herramientas de desarrollo necesarias para compilar y ejecutar Xv6
+![Segundo Cambio](Capturas/Captura2.png)
 
-Paso4: Clonar repositorio
-Cloné el repositorio de Xv6 desde GitHub en mi directorio de trabajo.
-----------------------------------------------------------------------------------------------------------------------------
-Problemas Encontrados y Soluciones
+En el tercer paso se editó el archivo syscall.c para agregar la nueva llamada al sistema.
 
-Problema 1: Incompatibilidad con Funciones de Temporización
+![Tercer Cambio](Capturas/Captura3.png)
 
-Al intentar compilar y ejecutar Xv6, encontré problemas de compatibilidad con las siguientes funciones en el archivo riscv.h:
-r_stimecmp()
-w_stimecmp(uint64 x)
-r_menvcfg()
-w_menvcfg(uint64 x)
+Luego se buscó modificar el archivo user.h para declarar la nueva función.
 
-Solución:
+![Tercer Cambio](Capturas/Captura4.png)
 
-Comenté temporalmente las funciones mencionadas en riscv.h para evitar que causen errores durante la compilación.
+En el cuarto paso se modificó el archivo usys.s para añadir la llamada a Sistema.
 
-Problema 2: Incompatibilidad en el Archivo start.c
+![Tercer Cambio](Capturas/Captura5.png)
 
-También encontré un problema al inicializar la interrupción del temporizador en el archivo start.c en la siguiente línea:
-w_stimecmp(r_time() + 1000000);
+Por último se creo el archivo test.c en la carpeta user para probar la llamada.
 
-Solución:
+![Tercer Cambio](Capturas/Captura6.png)
 
-Comenté la línea mencionada para evitar el error, lo que permitió que Xv6 se ejecutara sin problemas.
-----------------------------------------------------------------------------------------------------------------------------
-Con las funciones comentadas, Xv6 se compila y se ejecuta correctamente en mi entorno configurado en WSL.
+Como paso adicional para realizar el test se modifico el archivo Makefile para agregar el archivo test.c
 
-![Primera Captura del SO funcionando](Capturas/captura1.png)
-![Seguda Captura del SO funcionando](Capturas/captura2.png)
+![Tercer Cambio](Capturas/Captura7.png)
+
+Prueba de la nueva función.
+
+![Tercer Cambio](Capturas/Captura8.png)
