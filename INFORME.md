@@ -1,3 +1,5 @@
+Notar que el archivo donde se realizó la prueba se llama test.c y no yosoytupadre.c igual mente este cambio se realizó en Tarea1_2 siendo esta la entrega que cuenta con los requerimientos para el 7.
+
 Para la tarea 1 Parte 1
 Lo primero fué definir en syscall.h el número de la llamada de la nueva función "getppid"
 
