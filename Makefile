@@ -140,7 +140,7 @@ UPROGS=\
 	$U/_grind\
 	$U/_wc\
 	$U/_zombie\
-	$U/_test\
+	$U/_yosoytupadre\
 	$U/_test2\
 
 fs.img: mkfs/mkfs README $(UPROGS)
