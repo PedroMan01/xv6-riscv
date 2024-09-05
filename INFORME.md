@@ -15,7 +15,7 @@ Luego se buscó modificar el archivo user.h para declarar la nueva función.
 
 ![Cuarto Cambio](Capturas/Captura4.png)
 
-En el cuarto paso se modificó el archivo usys.s para añadir la llamada a Sistema.
+En el cuarto paso se modificó el archivo usys.pl para añadir la llamada a Sistema. Notar que el archivo es el que se encarga de generar el archivo usy.S el cual es el que verdaderamente se debe modificar.
 
 ![Quinto Cambio](Capturas/Captura5.png)
 
@@ -30,3 +30,5 @@ Como paso adicional para realizar el test se modifico el archivo Makefile para a
 Prueba de la nueva función.
 
 ![Octabo Cambio](Capturas/Captura8.png)
+
+Dentro de las mayores dificultades fueron las de descubrir donde se realizaban las modificaciones y tambiar aberigur algunos archivos que eran auto generados lo que si no se realizaba un make clean no se apreciaba correctamente.
