@@ -101,9 +101,5 @@ uint64
 get_ancestor(int level)
 {
     struct proc *p = myproc();
-
-    // Aquí deberías implementar la lógica para obtener el ancestro
-    // Devolver un valor de ejemplo, por ejemplo, el PID del proceso padre
-    // Aquí solo devolvemos el PID del proceso padre para ilustrar
     return p->parent ? p->parent->pid : -1;
 }
