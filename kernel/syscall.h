@@ -22,4 +22,5 @@
 #define SYS_close  21
 #define SYS_getppid 22
 #define SYS_getancestor 23
-
+#define SYS_console_acquire 24
+#define SYS_console_release 25

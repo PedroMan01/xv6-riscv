@@ -146,6 +146,9 @@ found:
   p->context.ra = (uint64)forkret;
   p->context.sp = p->kstack + PGSIZE;
 
+  p->priority = 0;
+  p->boost = 1;
+
   return p;
 }
 
@@ -441,8 +444,58 @@ wait(uint64 addr)
 //  - swtch to start running that process.
 //  - eventually that process transfers control
 //    via swtch back to the scheduler.
-void
-scheduler(void)
+
+void scheduler(void) {
+  struct proc *p;
+  struct cpu *c = mycpu();
+  c->proc = 0;
+
+  for (;;) {
+    intr_on();  // Habilitar interrupciones para evitar deadlocks
+
+    int found = 0;
+    for (p = proc; p < &proc[NPROC]; p++) {
+      acquire(&p->lock);  // Adquirir el lock del proceso
+
+      if (p->state == RUNNABLE) {
+        // Aumentar o disminuir la prioridad según el boost
+        p->priority += p->boost;
+
+        // Asegurarse de que la prioridad esté dentro de los límites
+        if (p->priority >= 9) {
+          p->priority = 9;  // Máxima prioridad
+          p->boost = -1;    // Cambiar boost a negativo
+        } else if (p->priority <= 0) {
+          p->priority = 0;  // Mínima prioridad
+          p->boost = 1;     // Cambiar boost a positivo
+        }
+
+        // Proceso RUNNABLE encontrado, cambiar su estado a RUNNING
+        p->state = RUNNING;
+        c->proc = p;
+
+        // Cambiar contexto al proceso
+        swtch(&c->context, &p->context);
+
+        // El proceso ha terminado por ahora. Debe haber cambiado su estado.
+        c->proc = 0;
+        found = 1;  // Marcamos que encontramos un proceso runnable
+      }
+      
+      release(&p->lock);  // Liberar el lock del proceso
+    }
+
+    // Si no se encontró ningún proceso, se detiene el núcleo hasta una interrupción.
+    if (found == 0) {
+      asm volatile("wfi");  // Esperar por una interrupción
+    }
+  }
+}
+
+
+
+/*
+void scheduler(void)
 {
   struct proc *p;
   struct cpu *c = mycpu();
@@ -479,7 +532,7 @@ scheduler(void)
     }
   }
 }
-
+*/
 // Switch to scheduler.  Must hold only p->lock
 // and have changed proc->state. Saves and restores
 // intena because intena is a property of this

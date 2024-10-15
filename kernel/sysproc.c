@@ -7,6 +7,12 @@
 #include "proc.h"
 #include "syscall.h"
 
+
+extern struct {
+    struct spinlock lock;
+} cons;
+
+
 uint64
 sys_exit(void)
 {
@@ -107,3 +113,15 @@ get_ancestor(int level)
     // Aquí solo devolvemos el PID del proceso padre para ilustrar
     return p->parent ? p->parent->pid : -1;
 }
+uint64
+sys_console_acquire(void) {
+    acquire(&cons.lock);  // Adquirimos el lock de la consola
+    return 0;
+}
+
+uint64
+sys_console_release(void) {
+    release(&cons.lock);  // Liberamos el lock de la consola
+    return 0;
+}
+

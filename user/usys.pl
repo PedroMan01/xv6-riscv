@@ -38,3 +38,5 @@ entry("sleep");
 entry("uptime");
 entry("getppid");
 entry("getancestor");
+entry("console_acquire");
+entry("console_release");

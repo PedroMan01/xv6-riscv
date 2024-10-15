@@ -142,6 +142,7 @@ UPROGS=\
 	$U/_zombie\
 	$U/_yosoytupadre\
 	$U/_test2\
+	$U/_test_priority\
 
 fs.img: mkfs/mkfs README $(UPROGS)
 	mkfs/mkfs fs.img README $(UPROGS)

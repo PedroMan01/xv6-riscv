@@ -26,6 +26,9 @@ int uptime(void);
 int getppid(void);
 int getancestor(int generation);
 
+int console_acquire(void);
+int console_release(void);
+
 
 // ulib.c
 int stat(const char*, struct stat*);
