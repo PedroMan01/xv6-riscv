@@ -1,49 +1,48 @@
-xv6 is a re-implementation of Dennis Ritchie's and Ken Thompson's Unix
-Version 6 (v6).  xv6 loosely follows the structure and style of v6,
-but is implemented for a modern RISC-V multiprocessor using ANSI C.
+Para la tarea 2
+Lo primero fué modificar la estructura de los rocesos agregando los nuevos campos "priority" y "boost" así poder modificar estos campos según sea nesesario para cada proceso por el scheduler
 
-ACKNOWLEDGMENTS
+![Primer Cambio](Capturas/Captura1.png)
 
-xv6 is inspired by John Lions's Commentary on UNIX 6th Edition (Peer
-to Peer Communications; ISBN: 1-57398-013-7; 1st edition (June 14,
-2000)).  See also https://pdos.csail.mit.edu/6.1810/, which provides
-pointers to on-line resources for v6.
+En segundo lugar se buscó modificar el funcionamiento de el scheduler para cumplir con los requisitos de la tarea y utilizar los nuevos campos de los porcesos.
 
-The following people have made contributions: Russ Cox (context switching,
-locking), Cliff Frey (MP), Xiao Yu (MP), Nickolai Zeldovich, and Austin
-Clements.
+![Segundo Cambio](Capturas/Captura2.png)
 
-We are also grateful for the bug reports and patches contributed by
-Takahiro Aoyagi, Marcelo Arroyo, Silas Boyd-Wickizer, Anton Burtsev,
-carlclone, Ian Chen, Dan Cross, Cody Cutler, Mike CAT, Tej Chajed,
-Asami Doi,Wenyang Duan, eyalz800, Nelson Elhage, Saar Ettinger, Alice
-Ferrazzi, Nathaniel Filardo, flespark, Peter Froehlich, Yakir Goaron,
-Shivam Handa, Matt Harvey, Bryan Henry, jaichenhengjie, Jim Huang,
-Matúš Jókay, John Jolly, Alexander Kapshuk, Anders Kaseorg, kehao95,
-Wolfgang Keller, Jungwoo Kim, Jonathan Kimmitt, Eddie Kohler, Vadim
-Kolontsov, Austin Liew, l0stman, Pavan Maddamsetti, Imbar Marinescu,
-Yandong Mao, Matan Shabtay, Hitoshi Mitake, Carmi Merimovich, Mark
-Morrissey, mtasm, Joel Nider, Hayato Ohhashi, OptimisticSide,
-phosphagos, Harry Porter, Greg Price, RayAndrew, Jude Rich, segfault,
-Ayan Shafqat, Eldar Sehayek, Yongming Shen, Fumiya Shigemitsu, snoire,
-Taojie, Cam Tenny, tyfkda, Warren Toomey, Stephen Tu, Alissa Tung,
-Rafael Ubal, Amane Uehara, Pablo Ventura, Xi Wang, WaheedHafez,
-Keiichi Watanabe, Lucas Wolf, Nicolas Wolovick, wxdao, Grant Wu, x653,
-Jindong Zhang, Icenowy Zheng, ZhUyU1997, and Zou Chang Wei.
+El tercer paso fue crear un programa para pobar las nuevas funcionalidades del scheduler el programa se decidió llamar "test_priority.c" y en este se agregarion los requisitos requeridos, 20 procesos con un sleep para la visualisación. 
 
-The code in the files that constitute xv6 is
-Copyright 2006-2024 Frans Kaashoek, Robert Morris, and Russ Cox.
+![Cuarto Cambio](Capturas/Captura3.png)
 
-ERROR REPORTS
+Se agregó el programa "test_priority" en el Makelife para la ejecución
 
-Please send errors and suggestions to Frans Kaashoek and Robert Morris
-(kaashoek,rtm@mit.edu).  The main purpose of xv6 is as a teaching
-operating system for MIT's 6.1810, so we are more interested in
-simplifications and clarifications than new features.
+![Cuarto Cambio](Capturas/Captura4.png)
 
-BUILDING AND RUNNING XV6
+Debido a la primera gran dificultad la cual consistía en una sobreposición de los printf en pantalla fué que se decidió agregar dos nuevas funciones para bloquear la consola. Apartando las pruebas de código en las que se buscó que el scheduler funcionace bien y el test_priority estuviece bien definido.
 
-You will need a RISC-V "newlib" tool chain from
-https://github.com/riscv/riscv-gnu-toolchain, and qemu compiled for
-riscv64-softmmu.  Once they are installed, and in your shell
-search path, you can run "make qemu".
+Estas nuevas funciones se decidió crearlas porque el user no tiene la facultad de plocear la consola directamente por lo que se requirió crear funciones que hicieran llamadas al kernel y poder bloquear la consola con el printf del test_priority.
+
+El primero de estos pasos fue agregar estas funciones en syscall.h
+
+![Quinto Cambio](Capturas/Captura5.png)
+
+Luego definir las funciones con las llamadas al bloque y desbloqueo de la consola.
+
+![Sexto Cambio](Capturas/Captura6.png)
+
+A continuación las llamadas de ambas funciones se definen en syscall.c
+
+![Septimo Cambio](Capturas/Captura7.png)
+
+Luego se agregan las funciones en user.h
+
+![Octavo Cambio](Capturas/Captura8.png)
+
+Se agregaron estas nuevas funciones en tes_priority. Ya que la captura de test_priority que se muestra más arriva es de la última versión ya figuran estas funciones en la captura 4.
+
+Se agregaron las funciones en usys.pl.
+
+![Noveno Cambio](Capturas/Captura9.png)
+
+Por último la prueba de la nueva función.
+
+![Décimo Cambio](Capturas/Captura10.png)
+
+Como ya se mencionó la mayor dificultad que se encontró fue debido a esta entrada en consola simultanea donde se imprimían varias lineas de texto superpuestas con caracteres mesclados, donde se perdía la legibilidad del texto. Gracias a la tarea anterior fue que no se complicó el crear una nueva función para dar más facultades al user como la de bloquear la consola.
