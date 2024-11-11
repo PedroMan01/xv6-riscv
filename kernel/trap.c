@@ -70,8 +70,12 @@ usertrap(void)
   } else {
     printf("usertrap(): unexpected scause 0x%lx pid=%d\n", r_scause(), p->pid);
     printf("            sepc=0x%lx stval=0x%lx\n", r_sepc(), r_stval());
-    setkilled(p);
-  }
+    // No marcar como "killed" si no quieres terminar el proceso
+    // setkilled(p);
+    // Podrías, en cambio, permitir que se recupere
+    // Como ejemplo, reseteamos el proceso para continuar
+    p->trapframe->epc += 4;  // Devolver al siguiente paso para que continúe
+}
 
   if(killed(p))
     exit(-1);

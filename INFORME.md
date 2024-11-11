@@ -1,42 +1,44 @@
-Configuración del Entorno
+Para la tarea 3
+Lo primero fué agregar las nuevas funciones "mprotect" y "munprotect" en el archivo sysproc.c para posteriormente realizar las llamadas.
 
-Paso 1: Instalación de Ubuntu en WSL
-Instalé WSL (Windows Subsystem for Linux) en mi computadora Windows siguiendo los pasos oficiales de Microsoft.
-Luego, descargué e instalé Ubuntu desde Chrome.
+![Primer Cambio](Capturas/Captura1.png)
+![Primer Cambio](Capturas/Captura2.png)
+![Primer Cambio](Capturas/Captura3.png)
+![Primer Cambio](Capturas/Captura4.png)
 
-Paso2: Configurara VScode
-Configuré VSCode para trabajar con el entorno de desarrollo WSL, instalando las extensiones necesarias para la integración.
+En segundo lugar se agregan las funciones en usys.pl que es un generador del archivo usys.S.
 
-Paso 3: Instalación de Herramientas de Desarrollo
-En Ubuntu, instalé las herramientas de desarrollo necesarias para compilar y ejecutar Xv6
+![Segundo Cambio](Capturas/Captura5.png)
 
-Paso4: Clonar repositorio
-Cloné el repositorio de Xv6 desde GitHub en mi directorio de trabajo.
-----------------------------------------------------------------------------------------------------------------------------
-Problemas Encontrados y Soluciones
+El tercer paso fue agregar las funciones como llamadas de sistema en el archivo user.h. 
 
-Problema 1: Incompatibilidad con Funciones de Temporización
+![Tercer Cambio](Capturas/Captura6.png)
 
-Al intentar compilar y ejecutar Xv6, encontré problemas de compatibilidad con las siguientes funciones en el archivo riscv.h:
-r_stimecmp()
-w_stimecmp(uint64 x)
-r_menvcfg()
-w_menvcfg(uint64 x)
+Se definieron los numeros de llamada a sistema en el archivo syscall.h
 
-Solución:
+![Cuarto Cambio](Capturas/Captura7.png)
 
-Comenté temporalmente las funciones mencionadas en riscv.h para evitar que causen errores durante la compilación.
+Se agregaron estas llamadas en el archivo syscall.c
 
-Problema 2: Incompatibilidad en el Archivo start.c
+![Quinto Cambio](Capturas/Captura8.png)
 
-También encontré un problema al inicializar la interrupción del temporizador en el archivo start.c en la siguiente línea:
-w_stimecmp(r_time() + 1000000);
+Luego de esto se definió el archivo "prueba.c" el cual va a ser el responsable de probar las nuevas funciones con una llamada de parte del usuario.
 
-Solución:
+![Sexcto Cambio](Capturas/Captura9.png)
+![Sexcto Cambio](Capturas/Captura10.png)
 
-Comenté la línea mencionada para evitar el error, lo que permitió que Xv6 se ejecutara sin problemas.
-----------------------------------------------------------------------------------------------------------------------------
-Con las funciones comentadas, Xv6 se compila y se ejecuta correctamente en mi entorno configurado en WSL.
+Por último, con respecto al archivo prueba.c se realiza la modificación en Makelife para que se reconosca la llamada de usuario de este programa.
 
-![Primera Captura del SO funcionando](Capturas/captura1.png)
-![Seguda Captura del SO funcionando](Capturas/captura2.png)
+![Septimo Cambio](Capturas/Captura11.png)
+
+La primera de las dificultades que se encontaron fue que no se encontraba definido en el sistema el tamaño de una pagina por lo que se modifico el archivo param.h para agregar este parametro y utilizarlo en prueba.c
+
+![Octavo Cambio](Capturas/Captura12.png)
+
+Una segunda dificultad que se encontró a la hora de probar el código, era que en el sistema al encontrar una excepción de intentar escribir en una pagina protegida este mataba el proceso por lo que se bucó modificar esta función para el el proceso no finalizara con la esepción.
+
+![Noveno Cambio](Capturas/Captura13.png)
+
+Por último la prueba de las nuevas función.
+
+![Décimo Cambio](Capturas/Captura14.png)

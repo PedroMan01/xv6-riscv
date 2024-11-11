@@ -1,49 +1,44 @@
-xv6 is a re-implementation of Dennis Ritchie's and Ken Thompson's Unix
-Version 6 (v6).  xv6 loosely follows the structure and style of v6,
-but is implemented for a modern RISC-V multiprocessor using ANSI C.
+Para la tarea 3
+Lo primero fué agregar las nuevas funciones "mprotect" y "munprotect" en el archivo sysproc.c para posteriormente realizar las llamadas.
 
-ACKNOWLEDGMENTS
+![Primer Cambio](Capturas/Captura1.png)
+![Primer Cambio](Capturas/Captura2.png)
+![Primer Cambio](Capturas/Captura3.png)
+![Primer Cambio](Capturas/Captura4.png)
 
-xv6 is inspired by John Lions's Commentary on UNIX 6th Edition (Peer
-to Peer Communications; ISBN: 1-57398-013-7; 1st edition (June 14,
-2000)).  See also https://pdos.csail.mit.edu/6.1810/, which provides
-pointers to on-line resources for v6.
+En segundo lugar se agregan las funciones en usys.pl que es un generador del archivo usys.S.
 
-The following people have made contributions: Russ Cox (context switching,
-locking), Cliff Frey (MP), Xiao Yu (MP), Nickolai Zeldovich, and Austin
-Clements.
+![Segundo Cambio](Capturas/Captura5.png)
 
-We are also grateful for the bug reports and patches contributed by
-Takahiro Aoyagi, Marcelo Arroyo, Silas Boyd-Wickizer, Anton Burtsev,
-carlclone, Ian Chen, Dan Cross, Cody Cutler, Mike CAT, Tej Chajed,
-Asami Doi,Wenyang Duan, eyalz800, Nelson Elhage, Saar Ettinger, Alice
-Ferrazzi, Nathaniel Filardo, flespark, Peter Froehlich, Yakir Goaron,
-Shivam Handa, Matt Harvey, Bryan Henry, jaichenhengjie, Jim Huang,
-Matúš Jókay, John Jolly, Alexander Kapshuk, Anders Kaseorg, kehao95,
-Wolfgang Keller, Jungwoo Kim, Jonathan Kimmitt, Eddie Kohler, Vadim
-Kolontsov, Austin Liew, l0stman, Pavan Maddamsetti, Imbar Marinescu,
-Yandong Mao, Matan Shabtay, Hitoshi Mitake, Carmi Merimovich, Mark
-Morrissey, mtasm, Joel Nider, Hayato Ohhashi, OptimisticSide,
-phosphagos, Harry Porter, Greg Price, RayAndrew, Jude Rich, segfault,
-Ayan Shafqat, Eldar Sehayek, Yongming Shen, Fumiya Shigemitsu, snoire,
-Taojie, Cam Tenny, tyfkda, Warren Toomey, Stephen Tu, Alissa Tung,
-Rafael Ubal, Amane Uehara, Pablo Ventura, Xi Wang, WaheedHafez,
-Keiichi Watanabe, Lucas Wolf, Nicolas Wolovick, wxdao, Grant Wu, x653,
-Jindong Zhang, Icenowy Zheng, ZhUyU1997, and Zou Chang Wei.
+El tercer paso fue agregar las funciones como llamadas de sistema en el archivo user.h. 
 
-The code in the files that constitute xv6 is
-Copyright 2006-2024 Frans Kaashoek, Robert Morris, and Russ Cox.
+![Tercer Cambio](Capturas/Captura6.png)
 
-ERROR REPORTS
+Se definieron los numeros de llamada a sistema en el archivo syscall.h
 
-Please send errors and suggestions to Frans Kaashoek and Robert Morris
-(kaashoek,rtm@mit.edu).  The main purpose of xv6 is as a teaching
-operating system for MIT's 6.1810, so we are more interested in
-simplifications and clarifications than new features.
+![Cuarto Cambio](Capturas/Captura7.png)
 
-BUILDING AND RUNNING XV6
+Se agregaron estas llamadas en el archivo syscall.c
 
-You will need a RISC-V "newlib" tool chain from
-https://github.com/riscv/riscv-gnu-toolchain, and qemu compiled for
-riscv64-softmmu.  Once they are installed, and in your shell
-search path, you can run "make qemu".
+![Quinto Cambio](Capturas/Captura8.png)
+
+Luego de esto se definió el archivo "prueba.c" el cual va a ser el responsable de probar las nuevas funciones con una llamada de parte del usuario.
+
+![Sexcto Cambio](Capturas/Captura9.png)
+![Sexcto Cambio](Capturas/Captura10.png)
+
+Por último, con respecto al archivo prueba.c se realiza la modificación en Makelife para que se reconosca la llamada de usuario de este programa.
+
+![Septimo Cambio](Capturas/Captura11.png)
+
+La primera de las dificultades que se encontaron fue que no se encontraba definido en el sistema el tamaño de una pagina por lo que se modifico el archivo param.h para agregar este parametro y utilizarlo en prueba.c
+
+![Octavo Cambio](Capturas/Captura12.png)
+
+Una segunda dificultad que se encontró a la hora de probar el código, era que en el sistema al encontrar una excepción de intentar escribir en una pagina protegida este mataba el proceso por lo que se bucó modificar esta función para el el proceso no finalizara con la esepción.
+
+![Noveno Cambio](Capturas/Captura13.png)
+
+Por último la prueba de las nuevas función.
+
+![Décimo Cambio](Capturas/Captura14.png)

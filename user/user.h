@@ -23,6 +23,11 @@ char* sbrk(int);
 int sleep(int);
 int uptime(void);
 
+//----------------------------
+uint64 mprotect(uint64 addr, int len);
+uint64 munprotect(uint64 addr, int len);
+//----------------------------
+
 // ulib.c
 int stat(const char*, struct stat*);
 char* strcpy(char*, const char*);
