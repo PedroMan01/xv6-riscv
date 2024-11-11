@@ -1,8 +1,8 @@
 Para la tarea 3
 Lo primero fué agregar las nuevas funciones "mprotect" y "munprotect" en el archivo sysproc.c para posteriormente realizar las llamadas.
 
-![Primer Cambio](Capturas/Captura1.png)
-![Primer Cambio](Capturas/Captura2.png)
+![Primer Cambio](Capturas/captura1.png)
+![Primer Cambio](Capturas/captura2.png)
 ![Primer Cambio](Capturas/Captura3.png)
 ![Primer Cambio](Capturas/Captura4.png)
 
