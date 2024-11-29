@@ -202,15 +202,16 @@ ialloc(uint dev, short type)
   struct buf *bp;
   struct dinode *dip;
 
-  for(inum = 1; inum < sb.ninodes; inum++){
+  for (inum = 1; inum < sb.ninodes; inum++) {
     bp = bread(dev, IBLOCK(inum, sb));
-    dip = (struct dinode*)bp->data + inum%IPB;
-    if(dip->type == 0){  // a free inode
-      memset(dip, 0, sizeof(*dip));
-      dip->type = type;
-      log_write(bp);   // mark it allocated on the disk
+    dip = (struct dinode*)bp->data + inum % IPB;
+    if (dip->type == 0) {  // un inode libre
+      memset(dip, 0, sizeof(*dip));  // limpiar el contenido del dinode
+      dip->type = type;             // establecer el tipo
+      dip->perm = 3;                // inicializar los permisos a lectura/escritura
+      log_write(bp);                // marcarlo como asignado en disco
       brelse(bp);
-      return iget(dev, inum);
+      return iget(dev, inum);       // obtener el inode en memoria
     }
     brelse(bp);
   }

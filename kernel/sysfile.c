@@ -83,16 +83,32 @@ uint64
 sys_write(void)
 {
   struct file *f;
+  struct inode *ip;
   int n;
   uint64 p;
-  
+
+  // Obtener argumentos
   argaddr(1, &p);
   argint(2, &n);
-  if(argfd(0, 0, &f) < 0)
-    return -1;
+  if (argfd(0, 0, &f) < 0) {
+    return -1; // Error al obtener el archivo
+  }
 
+  // Obtener el inode del archivo
+  ip = f->ip;
+  if (ip == 0) {
+    return -1; // No se pudo encontrar el inode
+  }
+
+  // Verificar permisos
+  if (ip->perm == 1 || ip->perm == 5) {
+    return -1; // No se puede escribir
+  }
+
+  // Escribir en el archivo
   return filewrite(f, p, n);
 }
+
 
 uint64
 sys_close(void)
@@ -349,6 +365,21 @@ sys_open(void)
     return -1;
   }
 
+  // Validar permisos del inodo
+  if (ip->perm == 1 && (omode & O_WRONLY || omode & O_RDWR)) {
+    fileclose(f);
+    iunlockput(ip);
+    end_op();
+    return -1;
+  }
+
+  if (ip->perm == 5) {
+    fileclose(f);
+    iunlockput(ip);
+    end_op();
+    return -1;
+  }
+
   if(ip->type == T_DEVICE){
     f->type = FD_DEVICE;
     f->major = ip->major;
@@ -369,6 +400,7 @@ sys_open(void)
 
   return fd;
 }
+
 
 uint64
 sys_mkdir(void)
@@ -502,4 +534,42 @@ sys_pipe(void)
     return -1;
   }
   return 0;
+}
+
+uint64 sys_chmod(void) {
+  char path[128];  // Definir un arreglo de caracteres con tamaño fijo
+  int mode;
+
+  // Obtener los argumentos
+  if (argstr(0, path, sizeof(path)) < 0) {  // argstr retorna -1 en caso de error
+    return -1;  // Error al obtener la cadena del path
+  }
+  argint(1, &mode);  // argint no devuelve valor, solo asigna directamente
+
+  // Validar que el modo sea permitido
+  if (mode < 0 || mode > 5) {
+    return -1;  // Modo inválido
+  }
+
+  struct inode *ip;
+  begin_op();
+  if ((ip = namei(path)) == 0) {
+    end_op();
+    return -1;  // Error al encontrar el inode
+  }
+  ilock(ip);
+
+  // Si es inmutable, no se puede cambiar el permiso
+  if (ip->perm == 5) {
+    iunlockput(ip);
+    end_op();
+    return -1;  // No se puede cambiar el permiso de este inode
+  }
+
+  // Cambiar permisos
+  ip->perm = mode;
+  iupdate(ip);
+  iunlockput(ip);
+  end_op();
+  return 0;  // Éxito
 }

@@ -61,9 +61,17 @@ fileclose(struct file *f)
 {
   struct file ff;
 
+  printf("Debug: Cerrando archivo con ref=%d, tipo=%d\n", f->ref, f->type);
+
   acquire(&ftable.lock);
+
+  if (f->ref < 1) {
+    printf("Debug: Archivo con referencia inválida (ref=%d, tipo=%d)\n", f->ref, f->type);
+    panic("fileclose: referencia inválida");
+  }
+
   if(f->ref < 1)
-    panic("fileclose");
+    panic("fileclose: referencia inválida");
   if(--f->ref > 0){
     release(&ftable.lock);
     return;
@@ -74,13 +82,18 @@ fileclose(struct file *f)
   release(&ftable.lock);
 
   if(ff.type == FD_PIPE){
+    printf("Debug: Cerrando un FD_PIPE\n");
     pipeclose(ff.pipe, ff.writable);
   } else if(ff.type == FD_INODE || ff.type == FD_DEVICE){
+    printf("Debug: Cerrando un FD_INODE o FD_DEVICE\n");
     begin_op();
     iput(ff.ip);
     end_op();
+  } else {
+    printf("Debug: Tipo de archivo no reconocido: %d\n", ff.type);
   }
 }
+
 
 // Get metadata about file f.
 // addr is a user virtual address, pointing to a struct stat.
