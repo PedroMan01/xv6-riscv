@@ -1,49 +1,43 @@
-xv6 is a re-implementation of Dennis Ritchie's and Ken Thompson's Unix
-Version 6 (v6).  xv6 loosely follows the structure and style of v6,
-but is implemented for a modern RISC-V multiprocessor using ANSI C.
+Para la tarea 4
+Lo primero fué agregar la nueva llamada a sistema "chmod" en los diferentes archivos. 
 
-ACKNOWLEDGMENTS
+![Primer Cambio](Capturas/captura1.png)
 
-xv6 is inspired by John Lions's Commentary on UNIX 6th Edition (Peer
-to Peer Communications; ISBN: 1-57398-013-7; 1st edition (June 14,
-2000)).  See also https://pdos.csail.mit.edu/6.1810/, which provides
-pointers to on-line resources for v6.
+En segundo lugar se agrega la funcion en usys.pl que es un generador del archivo usys.S.
 
-The following people have made contributions: Russ Cox (context switching,
-locking), Cliff Frey (MP), Xiao Yu (MP), Nickolai Zeldovich, and Austin
-Clements.
+![Segundo Cambio](Capturas/captura2.png)
 
-We are also grateful for the bug reports and patches contributed by
-Takahiro Aoyagi, Marcelo Arroyo, Silas Boyd-Wickizer, Anton Burtsev,
-carlclone, Ian Chen, Dan Cross, Cody Cutler, Mike CAT, Tej Chajed,
-Asami Doi,Wenyang Duan, eyalz800, Nelson Elhage, Saar Ettinger, Alice
-Ferrazzi, Nathaniel Filardo, flespark, Peter Froehlich, Yakir Goaron,
-Shivam Handa, Matt Harvey, Bryan Henry, jaichenhengjie, Jim Huang,
-Matúš Jókay, John Jolly, Alexander Kapshuk, Anders Kaseorg, kehao95,
-Wolfgang Keller, Jungwoo Kim, Jonathan Kimmitt, Eddie Kohler, Vadim
-Kolontsov, Austin Liew, l0stman, Pavan Maddamsetti, Imbar Marinescu,
-Yandong Mao, Matan Shabtay, Hitoshi Mitake, Carmi Merimovich, Mark
-Morrissey, mtasm, Joel Nider, Hayato Ohhashi, OptimisticSide,
-phosphagos, Harry Porter, Greg Price, RayAndrew, Jude Rich, segfault,
-Ayan Shafqat, Eldar Sehayek, Yongming Shen, Fumiya Shigemitsu, snoire,
-Taojie, Cam Tenny, tyfkda, Warren Toomey, Stephen Tu, Alissa Tung,
-Rafael Ubal, Amane Uehara, Pablo Ventura, Xi Wang, WaheedHafez,
-Keiichi Watanabe, Lucas Wolf, Nicolas Wolovick, wxdao, Grant Wu, x653,
-Jindong Zhang, Icenowy Zheng, ZhUyU1997, and Zou Chang Wei.
+El tercer paso fue agregar la funcion como llamadas de sistema en el archivo user.h. 
 
-The code in the files that constitute xv6 is
-Copyright 2006-2024 Frans Kaashoek, Robert Morris, and Russ Cox.
+![Tercer Cambio](Capturas/captura3.png)
 
-ERROR REPORTS
+Se define el numero de llamada a sistema en el archivo syscall.h
 
-Please send errors and suggestions to Frans Kaashoek and Robert Morris
-(kaashoek,rtm@mit.edu).  The main purpose of xv6 is as a teaching
-operating system for MIT's 6.1810, so we are more interested in
-simplifications and clarifications than new features.
+![Cuarto Cambio](Capturas/captura4.png)
 
-BUILDING AND RUNNING XV6
+Se agregaró esta llamada en el archivo syscall.c
 
-You will need a RISC-V "newlib" tool chain from
-https://github.com/riscv/riscv-gnu-toolchain, and qemu compiled for
-riscv64-softmmu.  Once they are installed, and in your shell
-search path, you can run "make qemu".
+![Quinto Cambio](Capturas/captura5.png)
+
+Luego de esto se definió el archivo "chmod_test.c" el cual va a ser el responsable de probar la nueva funcion con una llamada de parte del usuario.
+
+![Sexcto Cambio](Capturas/captura6.png)
+![Sexcto Cambio](Capturas/captura7.png)
+
+Por último, con respecto al archivo chmod_test.c se realiza la modificación en Makelife para que se reconosca la llamada de usuario de este programa.
+
+![Septimo Cambio](Capturas/captura8.png)
+
+Dentro de las dificultades.
+
+Se encontraron problemas a la hora de implementar la función por lo que se agregaron algunos print en las funcion "fileclose" para visualizar cual era el problema pero no tiene relevancia en la implemantación. 
+
+![Octavo Cambio](Capturas/captura9.png)
+
+Una segunda dificultad fue a la hora de agregar un nuevo valor para la estructura de inode que permitiece manejar los permisos como se muetra a continuacion en la primera de las dos capturas de abajo. Ya que este nuevo valor llevó a una incompativilidad en la estructura de dinode de la memoria fisica ya que esta debía ser divisible por 1024 por lo que fue necesario agregar un valor extra "char pad[60]; // Padding to align size to 128 bytes"
+![Noveno Cambio](Capturas/captura10.png)
+![Noveno Cambio](Capturas/captura11.png)
+
+Por último la prueba de las nuevas función.
+
+![Décimo Cambio](Capturas/captura12.png)
